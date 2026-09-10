@@ -1,0 +1,6 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <img src="{{url_for('static', filename='images/avatar.jpg')}}" style="float: left; height: 100px;">
+    <h1>{{ username }}!</h1>
+{% endblock %}
