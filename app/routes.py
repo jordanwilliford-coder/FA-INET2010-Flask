@@ -15,8 +15,9 @@ def index():
             'body': 'The Avengers movie was so cool!'
         }
     ]
-    return render_template(
-        'index.html', 
-        title='Home', 
-        user=user, 
-        posts=posts)
+    return render_template('index.html', title='Home', user=user, posts=posts)
+
+@app.route('/profile/<username>')
+def profile(username):
+    user = {'username': username}
+    return render_template('profile.html', username=username, user=user)
