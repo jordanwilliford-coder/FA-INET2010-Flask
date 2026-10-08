@@ -1,16 +1,11 @@
-from flask import render_template, flash, redirect, url_for
+from datetime import datetime, timezone
+from flask import render_template, flash, redirect, url_for, request
 from flask_login import current_user, login_user, logout_user, login_required
 import sqlalchemy as sa
 from app import app, db
-from app.forms import LoginForm
-from app.models import User
-from app.forms import LoginForm, RegistrationForm
-import sqlalchemy as sa
-from app import app, db
-from app.models import User
-from datetime import datetime, timezone
-from flask import render_template, flash, redirect, url_for, request
 from app.forms import LoginForm, RegistrationForm, EditProfileForm
+from app.models import User
+
 
 @app.before_request
 def before_request():
@@ -18,11 +13,11 @@ def before_request():
         current_user.last_seen = datetime.now(timezone.utc)
         db.session.commit()
 
+
 @app.route('/')
 @app.route('/index')
 @login_required
 def index():
-    user = {'username': 'Miguel'}
     posts = [
         {
             'author': {'username': 'John'},
@@ -57,6 +52,7 @@ def logout():
     logout_user()
     return redirect(url_for('index'))
 
+
 @app.route('/register', methods=['GET', 'POST'])
 def register():
     if current_user.is_authenticated:
@@ -82,10 +78,11 @@ def user(username):
     ]
     return render_template('user.html', user=user, posts=posts)
 
+
 @app.route('/edit_profile', methods=['GET', 'POST'])
 @login_required
 def edit_profile():
-    form = EditProfileForm()
+    form = EditProfileForm(current_user.username)
     if form.validate_on_submit():
         current_user.username = form.username.data
         current_user.about_me = form.about_me.data
