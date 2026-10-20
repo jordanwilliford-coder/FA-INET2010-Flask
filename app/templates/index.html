@@ -1,27 +1,33 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <h1>Hi, {{ current_user.username }}!</h1>
+<h1>Hi, {{ current_user.username }}!</h1>
     {% if form %}
-    <form action="" method="post">
+<form action="" method="post" novalidate>
         {{ form.hidden_tag() }}
-        <p>
-            {{ form.post.label }}<br>
-            {{ form.post(cols=32, rows=4) }}<br>
+
+        <div class="form-floating mb-3">
+            {{ form.post(class="form-control" ~ (" is-invalid" if form.post.errors else ""), placeholder="Say something", style="height: 100px") }}
+            {{ form.post.label }}
             {% for error in form.post.errors %}
-            <span style="color: red;">[{{ error }}]</span>
+            <div class="invalid-feedback">{{ error }}</div>
             {% endfor %}
-        </p>
-        <p>{{ form.submit() }}</p>
-    </form>
+        </div>
+
+        {{ form.submit(class="btn btn-primary") }}
+</form>
     {% endif %}
+
     {% for post in posts %}
         {% include '_post.html' %}
     {% endfor %}
+
+    <div class="mt-3">
     {% if prev_url %}
-    <a href="{{ prev_url }}">Newer posts</a>
+    <a class="btn btn-secondary" href="{{ prev_url }}">Newer posts</a>
     {% endif %}
     {% if next_url %}
-    <a href="{{ next_url }}">Older posts</a>
+    <a class="btn btn-secondary" href="{{ next_url }}">Older posts</a>
     {% endif %}
+    </div>
 {% endblock %}
